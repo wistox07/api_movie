@@ -16,10 +16,13 @@ class ImageFactory extends Factory
      */
     public function definition(): array
     {
-        $nameFile = fake()->name();
+        $name = fake()->name();
+        $formatTexto = str_replace(' ', '_', $name);
+        $fileName = strtolower($formatTexto);
+
         return [
-            'name' => $nameFile,
-            "route" => $nameFile .".jpg"
+            'name' => $name,
+            "route" => $fileName.".jpg"
         ];
 
 

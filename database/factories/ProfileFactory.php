@@ -16,10 +16,10 @@ class ProfileFactory extends Factory
      */
     public function definition(): array
     {
-        $userId = User::inRandomOrder()->first();
+        $user = User::inRandomOrder()->first();
 
         return [
-            "user_id" => $userId,
+            "user_id" => $user->id,
             "name" => fake()->name(),
             "status" => fake()->boolean()
         ];
