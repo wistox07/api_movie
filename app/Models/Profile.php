@@ -16,5 +16,6 @@ class Profile extends Model
 
     public function images(){
         return $this->belongsToMany(Profile::class);
+        //pruebita
     }
 }
