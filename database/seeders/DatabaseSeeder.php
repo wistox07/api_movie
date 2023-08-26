@@ -25,7 +25,8 @@ class DatabaseSeeder extends Seeder
             
             DB::table('image_profile')->insert([
                 'image_id' =>  $image->id,
-                'profile_id' => $profile->id, 
+                'profile_id' => $profile->id,
+                'created_at'  => now(),
                 'status' => true
             ]);
         }

@@ -19,10 +19,13 @@ class ImageFactory extends Factory
         $name = fake()->name();
         $formatTexto = str_replace(' ', '_', $name);
         $fileName = strtolower($formatTexto);
+        $typeImage = ["perfil","principal_pelicula","secundaria_pelicula"];
+        $randomTypeImage = array_random($typeImage);
 
         return [
             'name' => $name,
-            "route" => $fileName.".jpg"
+            "route" => $fileName.".jpg",
+            "type" =>  randomTypeImage
         ];
 
 

@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::table('profiles', function (Blueprint $table) {
             $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('profile_image_id')->references('id')->on('profile_images');
         });
     }
 

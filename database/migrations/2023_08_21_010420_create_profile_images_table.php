@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('images', function (Blueprint $table) {
+        Schema::create('profile_images', function (Blueprint $table) {
             $table->id();
             $table->string("name");
             $table->string('route'); // Ruta o URL de la imagen
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('images');
+        Schema::dropIfExists('profile_images');
     }
 };
