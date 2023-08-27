@@ -12,9 +12,11 @@ class Profile extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+        //pruebaita
     }
 
     public function images(){
         return $this->belongsToMany(Profile::class);
+        //pruebita
     }
 }
