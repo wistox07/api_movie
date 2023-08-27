@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string("name");
             $table->string('route'); // Ruta o URL de la imagen
             $table->timestamps();
+            //gato
         });
     }
 
