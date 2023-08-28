@@ -15,8 +15,9 @@ class Profile extends Model
         //pruebaita
     }
 
-    public function images(){
-        return $this->belongsToMany(Profile::class);
-        //pruebita
+    public function profile_image(){
+        return $this->belongsTo(ProfileImage::class, );
     }
+
+
 }

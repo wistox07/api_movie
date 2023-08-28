@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Image extends Model
+class ProfileImage extends Model
 {
     use HasFactory;
 
     public function profiles(){
-        return $this->belongsToMany(Profile::class);
+        return $this->hasMany(Profile::class);
     }
 }
