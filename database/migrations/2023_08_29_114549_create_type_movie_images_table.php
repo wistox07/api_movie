@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('profile_images', function (Blueprint $table) {
+        Schema::create('type_movie_images', function (Blueprint $table) {
             $table->id();
             $table->string("name");
-            $table->string('route'); // Ruta o URL de la imagen
+            $table->string("description")->nullable();
             $table->boolean("status");
             $table->timestamps();
         });
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('profile_images');
+        Schema::dropIfExists('type_movie_images');
     }
 };

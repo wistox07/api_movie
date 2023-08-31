@@ -22,6 +22,8 @@ class ProfileImageFactory extends Factory
         return [
             'name' => $name,
             "route" => $fileName.".jpg",
+            "status" => fake()->boolean()
+
         ];
     }
 }
