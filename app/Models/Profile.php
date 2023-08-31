@@ -16,7 +16,7 @@ class Profile extends Model
     }
 
     public function profile_image(){
-        return $this->belongsTo(ProfileImage::class, );
+        return $this->belongsTo(ProfileImage::class);
     }
 
 
