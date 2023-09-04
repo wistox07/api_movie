@@ -13,17 +13,17 @@ return new class extends Migration
     {
         Schema::create('movies', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger("genre_movie_id");
-            $table->unsignedBigInteger("age_rating_movie_id");
-            $table->unsignedBigInteger("director_movie_id");
-
+            $table->unsignedBigInteger("genre_id");
+            $table->unsignedBigInteger("age_category_id");
+            $table->boolean("status");
             $table->string("name");
             $table->string("description");
-            $table->string("summary");
+            $table->text("summary");
             $table->time('duracion');
             $table->time('release_date');
 
-
+            $table->foreign('genre_id')->references('id')->on('genres');
+            $table->foreign('age_category_id')->references('id')->on('age_categories');
 
 
 

@@ -11,10 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('age_rating_movies', function (Blueprint $table) {
+        Schema::create('actors', function (Blueprint $table) {
             $table->id();
             $table->string("name");
-            $table->string("rating");
             $table->string("description")->nullable();
             $table->boolean("status");
             $table->timestamps();
@@ -26,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('age_rating_movies');
+        Schema::dropIfExists('actors');
     }
 };
