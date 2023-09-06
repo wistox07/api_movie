@@ -3,6 +3,8 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Models\Director;
+use App\Models\Movie;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Model>
@@ -16,8 +18,13 @@ class DirectorMovieFactory extends Factory
      */
     public function definition(): array
     {
+        $director = Director::inRandomOrder()->first();
+        $movie = Movie::inRandomOrder()->first();
+
         return [
-            //
+            "director_id" => $director->id,
+            "movie_id" => $movie->id,
+            "status" => fake()->boolean()
         ];
     }
 }
