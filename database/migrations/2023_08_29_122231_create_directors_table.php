@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('directors', function (Blueprint $table) {
             $table->id();
             $table->string("name");
-            $table->string("description")->nullable();
+            $table->date("birthday");
+            $table->string("nationality");
             $table->boolean("status");
             $table->timestamps();
         });

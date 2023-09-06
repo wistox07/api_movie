@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('age_categories', function (Blueprint $table) {
             $table->id();
             $table->string("name");
-            $table->string("rating");
+            $table->integer("min_edge");
             $table->string("description")->nullable();
             $table->boolean("status");
             $table->timestamps();

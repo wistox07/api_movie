@@ -20,13 +20,10 @@ return new class extends Migration
             $table->string("description");
             $table->text("summary");
             $table->time('duracion');
-            $table->time('release_date');
-
+            $table->date('release_date');
+            $table->timestamps();
             $table->foreign('genre_id')->references('id')->on('genres');
             $table->foreign('age_category_id')->references('id')->on('age_categories');
-
-
-
         });
     }
 
