@@ -18,5 +18,10 @@ class Movie extends Model
     {
         return $this->belongsTo(AgeCategory::class);
     }
+
+    public function movieImages(){
+        return $this->hasMany(MovieImage::class);
+
+    }
     
 }
