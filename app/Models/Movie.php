@@ -23,5 +23,13 @@ class Movie extends Model
         return $this->hasMany(MovieImage::class);
 
     }
+
+    public function actors(){
+        return $this->belongsToMany(Actor::class);
+    }
+
+    public function directors(){
+        return $this->belongsToMany(Director::class);
+    }
     
 }
