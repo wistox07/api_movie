@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginAuthRequest;
+use App\Http\Resources\LoginAuthResource;
 use Illuminate\Support\Facades\Auth;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Models\User;
@@ -39,11 +40,10 @@ class AuthController extends Controller
                 ], 401);
             }
 
-            return response()->json([
-                "status" => "success",
-                'user' => JWTAuth::user(),
-                'token' => $token,
-            ]);
+            $loginAuthResource = new LoginAuthResource(JWTAuth::user());
+            $loginAuthResource->additional(['status' => true ,'token' => $token]);
+            return  $loginAuthResource;
+
         } catch (JWTException $e) {
             return response()->json([
                 'status' => 'error',

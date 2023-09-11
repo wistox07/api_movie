@@ -23,7 +23,6 @@ class LoginAuthRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //'profile_id' => ["required", new ProfileIdExists],
             'email' => "required|email",
             'password' => ["required", Password::min(8)
             /*->numbers()
