@@ -1,6 +1,6 @@
 <?php
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,7 +13,31 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
-
+/*
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+*/
+
+//Route::post('register', 'AuthController@register');
+//Route::post('login', 'AuthController@login');
+//Route::middleware('auth:api')->post('logout', 'AuthController@logout');
+
+
+//Route::get('/login', [AuthController::class, "login"]);
+/*
+Route::prefix('/auth')->middleware(['auth', 'admin'])->group(function () {
+    // Rutas dentro del grupo "admin"
+    Route::get('login', 'AdminController@dashboard')->name('admin.dashboard');
+    Route::get('users', 'AdminController@users')->name('admin.users');
+    Route::get('settings', 'AdminController@settings')->name('admin.settings');
+});
+*/
+
+Route::prefix('/auth')->group(function () {
+    // Rutas dentro del grupo "admin"
+    Route::get('login', [AuthController::class, "login"]);
+    Route::get('logout', [AuthController::class, "logout"]);
+    Route::get('register',[AuthController::class, "register"]);
+});
+
