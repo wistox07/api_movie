@@ -6,9 +6,12 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginAuthRequest;
 use App\Http\Resources\LoginAuthResource;
+use Illuminate\Support\Facades\Hash;
+
 use Illuminate\Support\Facades\Auth;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Models\User;
+use Exception;
 
 class AuthController extends Controller
 {
@@ -32,24 +35,35 @@ class AuthController extends Controller
     public function login(LoginAuthRequest $request)
     {
         $credentials = $request->only('email', 'password');
+
         try {
-            if (!$token = JWTAuth::attempt($credentials)) {
+            $user = User::where('email', $credentials['email'])->first();
+            if (!$user || !Hash::check($credentials['password'], $user->password)){
                 return response()->json([
                     "status" => "error",
                     "message" => "Credenciales incorrectas"
                 ], 401);
             }
+            if ($user->status !== 1){
+                return response()->json([
+                    "status" => "error",
+                    "message" => "El usuario no se encuentra activo"
+                ], 401);
+            }
+           
 
-            $loginAuthResource = new LoginAuthResource(JWTAuth::user());
+            $token = JWTAuth::fromUser($user);
+            $loginAuthResource = new LoginAuthResource($user);
             $loginAuthResource->additional(['status' => true ,'token' => $token]);
             return  $loginAuthResource;
 
-        } catch (JWTException $e) {
+        } catch (Exception $e) {
             return response()->json([
                 'status' => 'error',
                 "message" => $e->getMessage()
             ], 500);
         }
+        
     }
 
     
