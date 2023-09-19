@@ -34,7 +34,6 @@ class LoginAuthResource extends JsonResource
 
         return [
             'user' => [
-                'id' => $this->id,
                 'name' => $this->name,
                 'email' => $this->email,
             ],

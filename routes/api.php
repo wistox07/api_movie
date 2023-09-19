@@ -36,8 +36,8 @@ Route::prefix('/auth')->middleware(['auth', 'admin'])->group(function () {
 
 Route::prefix('/auth')->group(function () {
     // Rutas dentro del grupo "admin"
-    Route::get('login', [AuthController::class, "login"]);
-    Route::get('logout', [AuthController::class, "logout"]);
-    Route::get('register',[AuthController::class, "register"]);
+    Route::post('login', [AuthController::class, "login"]);
+    Route::post('logout', [AuthController::class, "logout"]);
+    Route::post('register',[AuthController::class, "register"]);
 });
 

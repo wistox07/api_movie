@@ -4,30 +4,41 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\LoginAuthRequest;
 use App\Http\Resources\LoginAuthResource;
+use App\Http\Requests\RegisterAuthRequest;
+use App\Http\Requests\LoginAuthRequest;
 use Illuminate\Support\Facades\Hash;
-
-use Illuminate\Support\Facades\Auth;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Models\User;
 use Exception;
 
 class AuthController extends Controller
 {
-    public function register(Request $request)
+    public function register(RegisterAuthRequest $request)
     {
         // Validation logic here
-        
-        $user = new User([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => bcrypt($request->password),
-        ]);
-        
-        $user->save();
-        
-        return response()->json(['message' => 'User registered successfully']);
+        try {
+
+            $user = new User([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => bcrypt($request->password),
+                "status" =>1
+            ]);
+            $user->save();
+            
+            return response()->json([
+                "status" => "success",
+                "message" => "Usuario registrado"
+            ]);
+
+        }catch(Exception $ex){
+            return response()->json([
+                'status' => 'error',
+                "message" => $ex->getMessage()
+            ], 500);
+        }
+
     }
 
 
@@ -57,10 +68,10 @@ class AuthController extends Controller
             $loginAuthResource->additional(['status' => true ,'token' => $token]);
             return  $loginAuthResource;
 
-        } catch (Exception $e) {
+        } catch (Exception $ex) {
             return response()->json([
                 'status' => 'error',
-                "message" => $e->getMessage()
+                "message" => $ex->getMessage()
             ], 500);
         }
         
@@ -70,10 +81,22 @@ class AuthController extends Controller
         
     
 
-    public function logout()
+    public function logout(Request $request)
     {
-        JWTAuth::invalidate(JWTAuth::getToken());
-        
-        return response()->json(['message' => 'User logged out successfully']);
+        try{
+            JWTAuth::invalidate(JWTAuth::getToken());
+        }catch(Exception $ex){
+            return response()->json([
+                'status' => 'error',
+                "message" => $ex->getMessage()
+            ], 500);
+        }
+
+        return response()->json([
+            "status" => "success",
+            "message" => "Token Eliminado"
+        ]);
     }
+
+
 }

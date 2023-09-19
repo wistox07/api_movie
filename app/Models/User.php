@@ -21,6 +21,7 @@ class User extends Authenticatable implements JWTSubject // Implementa la interf
     protected $fillable = [
         'name',
         'email',
+        'status',
         'password',
     ];
 
