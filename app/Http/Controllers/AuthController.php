@@ -31,6 +31,11 @@ class AuthController extends Controller
                 "status" => "success",
                 "message" => "Usuario registrado"
             ]);
+            
+            //Registrar perfil 
+            //Registrar asociar imagen
+            //enviar correo
+
 
         }catch(Exception $ex){
             return response()->json([

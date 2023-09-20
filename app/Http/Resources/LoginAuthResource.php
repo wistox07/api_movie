@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Http\Resources\ProfileResource;
 
 class LoginAuthResource extends JsonResource
 {
@@ -37,7 +38,7 @@ class LoginAuthResource extends JsonResource
                 'name' => $this->name,
                 'email' => $this->email,
             ],
-            "profiles" => $this->profiles
+            "profiles" => ProfileResource::collection($this->profiles)
         ];
 
 
