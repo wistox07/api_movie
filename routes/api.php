@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use Tymon\JWTAuth\Http\Middleware\Authenticate;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,4 +42,10 @@ Route::prefix('/auth')->group(function () {
     Route::post('logout', [AuthController::class, "logout"]);
     Route::post('register',[AuthController::class, "register"]);
 });
+
+
+
+
+Route::apiResource('profile', ProfileController::class);
+
 
