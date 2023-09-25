@@ -35,17 +35,35 @@ Route::prefix('/auth')->middleware(['auth', 'admin'])->group(function () {
     Route::get('settings', 'AdminController@settings')->name('admin.settings');
 });
 */
-
+/*
 Route::prefix('/auth')->group(function () {
     // Rutas dentro del grupo "admin"
     Route::post('login', [AuthController::class, "login"]);
     Route::post('logout', [AuthController::class, "logout"]);
     Route::post('register',[AuthController::class, "register"]);
 });
+*/
+Route::group([
+    'middleware' => 'api',
+    'prefix' => '/auth'
+], function ($router) {
+    //Route::post('deserialize', [AuthController::class, "deserialize"]);
+    Route::post('login', [AuthController::class, "login"]);
+    Route::post('logout', [AuthController::class, "logout"]);
+    Route::post('register',[AuthController::class, "register"]);   
+});
 
 
 
 
-Route::apiResource('profile', ProfileController::class);
+//Route::apiResource('profile', ProfileController::class)->middleware("api");
 
+Route::group([
+    'middleware' => 'api',
+    'prefix' => '/profile'
+], function ($router) {
+    //Route::post('deserialize', [AuthController::class, "deserialize"]);
+    Route::get('me', [AuthController::class, "login"]);
+});
+Route::apiResource('profile', ProfileController::class)->middleware('api');
 

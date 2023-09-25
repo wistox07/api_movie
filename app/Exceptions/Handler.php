@@ -5,6 +5,7 @@ namespace App\Exceptions;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Auth\AuthenticationException;
 use Throwable;
 
 
@@ -55,4 +56,13 @@ class Handler extends ExceptionHandler
         }
         return parent::render($request, $exception);
     }
+
+    protected function unauthenticated($request, AuthenticationException $exception) 
+    {
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Token Inválido'
+        ], 401);
+    }
+
 }

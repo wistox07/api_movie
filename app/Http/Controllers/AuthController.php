@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\LoginAuthResource;
 use App\Http\Requests\RegisterAuthRequest;
 use App\Http\Requests\LoginAuthRequest;
+use App\Http\Resources\RegisterAuthResource;
 use Illuminate\Support\Facades\Hash;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Models\User;
@@ -14,6 +15,11 @@ use Exception;
 
 class AuthController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:api', ['except' => ['login', 'register']]);//login, register methods won't go through the api guard
+    }
+
     public function register(RegisterAuthRequest $request)
     {
         // Validation logic here
@@ -25,12 +31,19 @@ class AuthController extends Controller
                 'password' => bcrypt($request->password),
                 "status" =>1
             ]);
-            $user->save();
             
+            $user->save();
+            $token = JWTAuth::fromUser($user);
+            $registerAuthResource = new RegisterAuthResource($user);
+            $registerAuthResource->additional(['status' => "success" ,'token' => $token]);
+            return  $registerAuthResource;
+
+            /*
             return response()->json([
                 "status" => "success",
                 "message" => "Usuario registrado"
             ]);
+            */
             
             //Registrar perfil 
             //Registrar asociar imagen
@@ -102,6 +115,23 @@ class AuthController extends Controller
             "message" => "Token Eliminado"
         ]);
     }
+    /*
+    public function deserialize(){
+
+        try {
+            $user = JWTAuth::parseToken()->authenticate();
+            return response()->json($user);
+
+        } catch (Exception $ex) {
+            response()->json([
+                "status" => "error",
+                "message" => $ex->getMessage()
+            ]);
+            // Manejar el caso en que el token sea inválido o expire
+            
+        }
+    }
+    */
 
 
 }

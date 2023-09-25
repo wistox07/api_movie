@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Profile;
+use Tymon\JWTAuth\Facades\JWTAuth;
 use Exception;
 
 class ProfileController extends Controller
@@ -11,7 +12,16 @@ class ProfileController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function __construct()
+    {
+        $this->middleware('auth:api');
+    }
+
+    public function me(){
+        
+    }
+
+     public function index()
     {
         return Profile::all();
     }
@@ -23,8 +33,9 @@ class ProfileController extends Controller
     {
         try {
 
+            $user = JWTAuth::parseToken()->authenticate();
             $profile = new Profile([
-                'user_id' => $request->name,
+                'user_id' => $user->id,
                 "profile_image_id" => $request->profile_image_id,
                 'name' => $request->name,
                 "status" =>1
