@@ -63,7 +63,7 @@ Route::group([
     'prefix' => '/profile'
 ], function ($router) {
     //Route::post('deserialize', [AuthController::class, "deserialize"]);
-    Route::get('me', [AuthController::class, "login"]);
+    Route::get('me', [ProfileController::class, "me"]);
 });
 Route::apiResource('profile', ProfileController::class)->middleware('api');
 

@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Profile;
 use Tymon\JWTAuth\Facades\JWTAuth;
+use App\Http\Requests\StoreProfileRequest;
+use App\Http\Resources\LoginAuthResource;
+use App\Models\User;
 use Exception;
 
 class ProfileController extends Controller
@@ -18,7 +21,20 @@ class ProfileController extends Controller
     }
 
     public function me(){
-        
+        try{
+            $userToken = JWTAuth::parseToken()->authenticate();
+            $user = User::find($userToken->id);
+            $loginAuthResource = new LoginAuthResource($user);
+            $loginAuthResource->additional(['status' => true]);
+            return  $loginAuthResource;
+
+        }catch(Exception $ex){
+            return response()->json([
+                'status' => 'error',
+                "message" => $ex->getMessage()
+            ], 500);
+        }
+
     }
 
      public function index()
@@ -29,7 +45,7 @@ class ProfileController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreProfileRequest $request)
     {
         try {
 
