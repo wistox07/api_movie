@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Profile;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Http\Requests\StoreProfileRequest;
+use App\Http\Requests\ChooseProfileRequest;
 use App\Http\Resources\LoginAuthResource;
 use App\Models\User;
 use Exception;
@@ -18,6 +19,40 @@ class ProfileController extends Controller
     public function __construct()
     {
         $this->middleware('auth:api');
+    }
+
+    public function chooseProfile(ChooseProfileRequest $request){
+        try {
+            $profile = Profile::find($request->profile_image_id);
+            $user = $profile->user;
+            dd($profile,$user);
+            
+
+            /*
+            $user->save();
+            $token = JWTAuth::fromUser($user);
+            $registerAuthResource = new RegisterAuthResource($user);
+            $registerAuthResource->additional(['status' => "success" ,'token' => $token]);
+            return  $registerAuthResource;
+            */
+            /*
+            return response()->json([
+                "status" => "success",
+                "message" => "Usuario registrado"
+            ]);
+            */
+            
+            //Registrar perfil 
+            //Registrar asociar imagen
+            //enviar correo
+
+
+        }catch(Exception $ex){
+            return response()->json([
+                'status' => 'error',
+                "message" => $ex->getMessage()
+            ], 500);
+        }
     }
 
     public function me(){

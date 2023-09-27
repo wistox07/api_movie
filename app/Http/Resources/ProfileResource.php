@@ -17,7 +17,7 @@ class ProfileResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            "status" => ($this->status) ? true : false,
+            //"status" => ($this->status) ? true : false,
             "image" => $this->profile_image->route
         ];
 

@@ -5,12 +5,14 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\LoginAuthResource;
+use App\Http\Resources\ProfileResource;
 use App\Http\Requests\RegisterAuthRequest;
 use App\Http\Requests\LoginAuthRequest;
 use App\Http\Resources\RegisterAuthResource;
 use Illuminate\Support\Facades\Hash;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Models\User;
+use App\Models\Profile;
 use Exception;
 
 class AuthController extends Controller
@@ -79,12 +81,15 @@ class AuthController extends Controller
                     "message" => "El usuario no se encuentra activo"
                 ], 401);
             }
-           
 
-            $token = JWTAuth::fromUser($user);
-            $loginAuthResource = new LoginAuthResource($user);
-            $loginAuthResource->additional(['status' => true ,'token' => $token]);
-            return  $loginAuthResource;
+           
+            return ProfileResource::collection($user->profiles->where('status', 1)->sortBy('id', false));
+            //return ProfileResource::collection(Profile::where('status', 1)->get());
+            
+            //$token = JWTAuth::fromUser($user);
+            //$loginAuthResource = new LoginAuthResource($user);
+            //$loginAuthResource->additional(['status' => true ,'token' => $token]);
+            //return  $loginAuthResource;
 
         } catch (Exception $ex) {
             return response()->json([
