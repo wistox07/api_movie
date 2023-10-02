@@ -82,11 +82,15 @@ class AuthController extends Controller
                 ], 401);
             }
 
+
+            $token = JWTAuth::fromUser($user);
            
-            return ProfileResource::collection($user->profiles->where('status', 1)->sortBy('id', false));
+            $loginAuthResource = ProfileResource::collection($user->profiles->where('status', 1)->sortBy('id', false));
+            $loginAuthResource->additional(['status' => true ,'token' => $token]);
+            return  $loginAuthResource;
             //return ProfileResource::collection(Profile::where('status', 1)->get());
             
-            //$token = JWTAuth::fromUser($user);
+            //
             //$loginAuthResource = new LoginAuthResource($user);
             //$loginAuthResource->additional(['status' => true ,'token' => $token]);
             //return  $loginAuthResource;

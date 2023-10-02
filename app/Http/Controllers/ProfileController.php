@@ -21,12 +21,34 @@ class ProfileController extends Controller
         $this->middleware('auth:api');
     }
 
-    public function chooseProfile(ChooseProfileRequest $request){
+    public function chooseProfile(Request $request){
         try {
-            $profile = Profile::find($request->profile_image_id);
-            $user = $profile->user;
-            dd($profile,$user);
-            
+            //$profile = Profile::find($request->profile_image_id);
+            //$user = $profile->user;
+            //dd($profile,$user);
+
+            //$user = JWTAuth::parseToken()->authenticate();
+            //return response()->json($user);
+
+            $token = request()->header('Authorization');
+            //$payload = auth()->payload();
+
+            $data = JWTAuth::getPayload();
+
+            //JWTAuth::getPayload()->get('first_name');
+
+
+            //$user = JWTAuth::user($token);
+            // validar nuevamente si es posible autenticar 
+            //return response()->json($user);
+
+            //dd($token);
+            //$payload = JWTAuth::getPayload($token);
+            //dd($payload);
+            //return response()->json($payload);
+            //$statusLogin = $payload->get('statusLogin');
+
+            //return response()->json($user);
 
             /*
             $user->save();
@@ -50,7 +72,8 @@ class ProfileController extends Controller
         }catch(Exception $ex){
             return response()->json([
                 'status' => 'error',
-                "message" => $ex->getMessage()
+                "message" => $ex->getMessage(),
+                'trace' => $ex->getTrace()
             ], 500);
         }
     }

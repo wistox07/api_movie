@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Tymon\JWTAuth\Contracts\JWTSubject; // Asegúrate de importar la interfaz
 
+
 class User extends Authenticatable implements JWTSubject // Implementa la interfaz
 {
     use HasApiTokens, HasFactory, Notifiable;
@@ -55,8 +56,11 @@ class User extends Authenticatable implements JWTSubject // Implementa la interf
         return $this->getKey(); // Por lo general, esto es el campo 'id' del usuario
     }
 
+
     public function getJWTCustomClaims()
     {
-        return []; // Puedes incluir datos personalizados aquí si lo necesitas
+        return [
+            'statusLogin' => 1,
+        ];
     }
 }

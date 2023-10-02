@@ -22,10 +22,9 @@ class ChooseProfileRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "profile_image_id" =>[
+            "profile_id" =>[
                 "required",
-                "integer",
-                Rule::exists('profile_images', 'id')
+            //    Rule::exists('profile', 'id')
             ]
         ];
     }
