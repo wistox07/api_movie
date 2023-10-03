@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Profile;
-use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Http\Requests\StoreProfileRequest;
 use App\Http\Requests\ChooseProfileRequest;
 use App\Http\Resources\LoginAuthResource;
@@ -27,23 +26,18 @@ class ProfileController extends Controller
             //$user = $profile->user;
             //dd($profile,$user);
 
-            //$user = JWTAuth::parseToken()->authenticate();
             //return response()->json($user);
 
             $token = request()->header('Authorization');
             //$payload = auth()->payload();
 
-            $data = JWTAuth::getPayload();
-
-            //JWTAuth::getPayload()->get('first_name');
 
 
-            //$user = JWTAuth::user($token);
+
             // validar nuevamente si es posible autenticar 
             //return response()->json($user);
 
             //dd($token);
-            //$payload = JWTAuth::getPayload($token);
             //dd($payload);
             //return response()->json($payload);
             //$statusLogin = $payload->get('statusLogin');
@@ -52,7 +46,6 @@ class ProfileController extends Controller
 
             /*
             $user->save();
-            $token = JWTAuth::fromUser($user);
             $registerAuthResource = new RegisterAuthResource($user);
             $registerAuthResource->additional(['status' => "success" ,'token' => $token]);
             return  $registerAuthResource;
@@ -80,11 +73,10 @@ class ProfileController extends Controller
 
     public function me(){
         try{
-            $userToken = JWTAuth::parseToken()->authenticate();
-            $user = User::find($userToken->id);
-            $loginAuthResource = new LoginAuthResource($user);
-            $loginAuthResource->additional(['status' => true]);
-            return  $loginAuthResource;
+            //$user = User::find($userToken->id);
+            //$loginAuthResource = new LoginAuthResource($user);
+            //$loginAuthResource->additional(['status' => true]);
+            //return  $loginAuthResource;
 
         }catch(Exception $ex){
             return response()->json([
@@ -107,9 +99,8 @@ class ProfileController extends Controller
     {
         try {
 
-            $user = JWTAuth::parseToken()->authenticate();
             $profile = new Profile([
-                'user_id' => $user->id,
+               // 'user_id' => $user->id,
                 "profile_image_id" => $request->profile_image_id,
                 'name' => $request->name,
                 "status" =>1

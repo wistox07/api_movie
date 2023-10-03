@@ -56,7 +56,7 @@ class Handler extends ExceptionHandler
         }
         return parent::render($request, $exception);
     }
-
+/*
     protected function unauthenticated($request, AuthenticationException $exception) 
     {
         return response()->json([
@@ -64,5 +64,5 @@ class Handler extends ExceptionHandler
             'message' => 'Token Inválido'
         ], 401);
     }
-
+*/
 }

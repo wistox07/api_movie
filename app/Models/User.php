@@ -7,10 +7,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-use Tymon\JWTAuth\Contracts\JWTSubject; // Asegúrate de importar la interfaz
 
 
-class User extends Authenticatable implements JWTSubject // Implementa la interfaz
+class User extends Authenticatable  // Implementa la interfaz
 {
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -50,7 +49,7 @@ class User extends Authenticatable implements JWTSubject // Implementa la interf
     {
         return $this->hasMany(Profile::class);
     }
-
+    /*
     public function getJWTIdentifier()
     {
         return $this->getKey(); // Por lo general, esto es el campo 'id' del usuario
@@ -63,4 +62,5 @@ class User extends Authenticatable implements JWTSubject // Implementa la interf
             'statusLogin' => 1,
         ];
     }
+    */
 }

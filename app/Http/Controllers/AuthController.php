@@ -10,7 +10,6 @@ use App\Http\Requests\RegisterAuthRequest;
 use App\Http\Requests\LoginAuthRequest;
 use App\Http\Resources\RegisterAuthResource;
 use Illuminate\Support\Facades\Hash;
-use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Models\User;
 use App\Models\Profile;
 use Exception;
@@ -35,7 +34,6 @@ class AuthController extends Controller
             ]);
             
             $user->save();
-            $token = JWTAuth::fromUser($user);
             $registerAuthResource = new RegisterAuthResource($user);
             $registerAuthResource->additional(['status' => "success" ,'token' => $token]);
             return  $registerAuthResource;
@@ -83,7 +81,6 @@ class AuthController extends Controller
             }
 
 
-            $token = JWTAuth::fromUser($user);
            
             $loginAuthResource = ProfileResource::collection($user->profiles->where('status', 1)->sortBy('id', false));
             $loginAuthResource->additional(['status' => true ,'token' => $token]);
@@ -111,7 +108,6 @@ class AuthController extends Controller
     public function logout(Request $request)
     {
         try{
-            JWTAuth::invalidate(JWTAuth::getToken());
         }catch(Exception $ex){
             return response()->json([
                 'status' => 'error',
@@ -128,7 +124,6 @@ class AuthController extends Controller
     public function deserialize(){
 
         try {
-            $user = JWTAuth::parseToken()->authenticate();
             return response()->json($user);
 
         } catch (Exception $ex) {
