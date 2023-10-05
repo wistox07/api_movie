@@ -8,14 +8,6 @@ use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use App\Models\Profile;
 use App\Models\ProfileImage;
-use App\Models\Actor;
-use App\Models\Director;
-use App\Models\MovieImage;
-use App\Models\Movie;
-use App\Models\ActorMovie;
-use App\Models\DirectorMovie;
-
-
 class DatabaseSeeder extends Seeder
 {
     /**
@@ -114,15 +106,6 @@ class DatabaseSeeder extends Seeder
             'min_edge' => 15,
             'status' => true
         ]);
-
-        DB::table('age_categories')->insert([
-            'name' => 'mayores de 18 años',
-            'min_edge' => 18,
-            'status' => true
-        ]);
-        Movie::factory(10)->create();
-        MovieImage::factory(10)->create();
-        ActorMovie::factory(10)->create();
-        DirectorMovie::factory(10)->create();
+        // MAIN
     }
 }
