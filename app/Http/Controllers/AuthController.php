@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Jwt\GenerateToken;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\LoginAuthResource;
 use App\Http\Resources\ProfileResource;
@@ -16,10 +17,12 @@ use Exception;
 
 class AuthController extends Controller
 {
+    
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login', 'register']]);//login, register methods won't go through the api guard
+        $this->middleware('auth:token', ['except' => ['login', 'register']]);//login, register methods won't go through the api guard
     }
+    
 
     public function register(RegisterAuthRequest $request)
     {
@@ -66,8 +69,20 @@ class AuthController extends Controller
         $credentials = $request->only('email', 'password');
 
         try {
-            $user = User::where('email', $credentials['email'])->first();
-            if (!$user || !Hash::check($credentials['password'], $user->password)){
+            //$user = User::where('email', $credentials['email'])->with('profiles')->first();
+            $user = User::where('email', $credentials['email'])
+                            ->with(['profiles' => function ($query) {
+                                $query->where('status', 1)
+                                ->orderBy('id', 'desc'); // Ordenar los perfiles por el campo 'id' de forma descendente
+                            }])
+                            ->first();
+            if(!$user){
+                return response()->json([
+                    "status" => "error",
+                    "message" => "No existe un usuario registrado con ese email"
+                ], 401);
+            }
+            if (!Hash::check($credentials['password'], $user->password)){
                 return response()->json([
                     "status" => "error",
                     "message" => "Credenciales incorrectas"
@@ -80,17 +95,15 @@ class AuthController extends Controller
                 ], 401);
             }
 
+            $data = [
+                "user" => $user,
+                "profile_id_selected" => null
+            ];
+            $token = (new GenerateToken)->getJWTToken($data);
 
-           
-            $loginAuthResource = ProfileResource::collection($user->profiles->where('status', 1)->sortBy('id', false));
-            $loginAuthResource->additional(['status' => true ,'token' => $token]);
+            $loginAuthResource = new LoginAuthResource($user);
+            $loginAuthResource->additional([ 'profile_id_selected' => null, 'status' => true ,'token' => $token]);
             return  $loginAuthResource;
-            //return ProfileResource::collection(Profile::where('status', 1)->get());
-            
-            //
-            //$loginAuthResource = new LoginAuthResource($user);
-            //$loginAuthResource->additional(['status' => true ,'token' => $token]);
-            //return  $loginAuthResource;
 
         } catch (Exception $ex) {
             return response()->json([

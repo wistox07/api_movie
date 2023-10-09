@@ -2,6 +2,9 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\MovieController;
+
+use App\Models\Movie;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -58,7 +61,7 @@ Route::group([
 //Route::apiResource('profile', ProfileController::class)->middleware("api");
 
 Route::group([
-    'middleware' => 'api',
+    'middleware' => 'token',
     'prefix' => '/profile'
 ], function ($router) {
     //Route::post('deserialize', [AuthController::class, "deserialize"]);
@@ -68,4 +71,5 @@ Route::group([
 
 
 Route::apiResource('profile', ProfileController::class)->middleware('api');
+Route::apiResource('movie', MovieController::class)->middleware('api');
 

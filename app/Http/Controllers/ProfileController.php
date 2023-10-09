@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Jwt\GenerateToken;
 use Illuminate\Http\Request;
 use App\Models\Profile;
 use App\Http\Requests\StoreProfileRequest;
@@ -15,52 +16,48 @@ class ProfileController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function __construct()
-    {
-        $this->middleware('auth:api');
-    }
+
 
     public function chooseProfile(Request $request){
         try {
-            //$profile = Profile::find($request->profile_image_id);
-            //$user = $profile->user;
-            //dd($profile,$user);
+            //
+            $profile_id =  (int) $request->input("profile_id");
+            $requestToken = request()->header('token');
+            $deserializeToken = (new GenerateToken)->verifyToken($requestToken);
+            $userId = $deserializeToken->data->user->id;
 
-            //return response()->json($user);
+            $user = User::where('id', $userId)
+            ->with(['profiles' => function ($query) {
+                $query->where('status', 1)
+                ->orderBy('id', 'desc'); // Ordenar los perfiles por el campo 'id' de forma descendente
+            }])
+            ->first();
 
-            $token = request()->header('Authorization');
-            //$payload = auth()->payload();
 
+            if ($user->status !== 1){
+                return response()->json([
+                    "status" => "error",
+                    "message" => "El usuario no se encuentra activo"
+                ], 401);
+            }
 
+            $profile = Profile::where('id', $profile_id)->first();
+            if ($profile->status !== 1){
+                return response()->json([
+                    "status" => "error",
+                    "message" => "El Perfil no se encuentra activo"
+                ], 401);
+            }
 
-
-            // validar nuevamente si es posible autenticar 
-            //return response()->json($user);
-
-            //dd($token);
-            //dd($payload);
-            //return response()->json($payload);
-            //$statusLogin = $payload->get('statusLogin');
-
-            //return response()->json($user);
-
-            /*
-            $user->save();
-            $registerAuthResource = new RegisterAuthResource($user);
-            $registerAuthResource->additional(['status' => "success" ,'token' => $token]);
-            return  $registerAuthResource;
-            */
-            /*
-            return response()->json([
-                "status" => "success",
-                "message" => "Usuario registrado"
-            ]);
-            */
+            $data = [
+                "user" => $user,
+                "profile_id_selected" =>  $profile_id
+            ];
             
-            //Registrar perfil 
-            //Registrar asociar imagen
-            //enviar correo
-
+            $token = (new GenerateToken)->getJWTToken($data);
+            $loginAuthResource = new LoginAuthResource($user);
+            $loginAuthResource->additional([ 'profile_id_selected' => $profile_id, 'status' => true ,'token' => $token]);
+            return  $loginAuthResource;
 
         }catch(Exception $ex){
             return response()->json([
@@ -89,7 +86,11 @@ class ProfileController extends Controller
 
      public function index()
     {
-        return Profile::all();
+        $profile = Profile::all();
+
+        return response()->json([
+            $profile
+        ], 500);
     }
 
     /**
