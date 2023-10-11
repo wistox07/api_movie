@@ -20,7 +20,7 @@ class AuthController extends Controller
     
     public function __construct()
     {
-        $this->middleware('auth:token', ['except' => ['login', 'register']]);//login, register methods won't go through the api guard
+        $this->middleware('auth:auth_token', ['except' => ['login', 'register']]);//login, register methods won't go through the api guard
     }
     
 

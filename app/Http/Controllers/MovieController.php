@@ -20,28 +20,8 @@ class MovieController extends Controller
                     ->with('movieImages')
                     ->with('movieImages.typeMovieImage')
                     ->get();
-        /*
-    public function actors(){
-        return $this->belongsToMany(Actor::class);
-    }
 
-    public function directors(){
-        return $this->belongsToMany(Director::class);
-    }
-        */
         return MovieResource::collection($movies);
-
-        /*->with(['genre' => function ($query) {
-            $query->where('status', 1)
-            ->orderBy('id', 'desc'); // Ordenar los perfiles por el campo 'id' de forma descendente
-        }])
-        ->first();
-        */
-        //$movieResource = new MovieResource($movie);
-       // $movieResource->additional([ 'profile_id_selected' => null, 'status' => true ,'token' => $token]);
-       // return  $movieResource;
-
-
     }
 
     /**

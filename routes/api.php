@@ -46,7 +46,7 @@ Route::prefix('/auth')->group(function () {
 });
 */
 Route::group([
-    'middleware' => 'api',
+    'middleware' => 'auth_token',
     'prefix' => '/auth'
 ], function ($router) {
     //Route::post('deserialize', [AuthController::class, "deserialize"]);
@@ -66,10 +66,18 @@ Route::group([
 ], function ($router) {
     //Route::post('deserialize', [AuthController::class, "deserialize"]);
     Route::post('login', [ProfileController::class, "chooseProfile"]);
+});
+
+
+Route::group([
+    'middleware' => 'auth_token',
+    'prefix' => '/profile'
+], function ($router) {
+    //Route::post('deserialize', [AuthController::class, "deserialize"]);
     Route::get('me', [ProfileController::class, "me"]);
 });
 
 
-Route::apiResource('profile', ProfileController::class)->middleware('api');
-Route::apiResource('movie', MovieController::class)->middleware('api');
+Route::apiResource('profile', ProfileController::class)->middleware('auth_token');
+Route::apiResource('movie', MovieController::class)->middleware('auth_token');
 

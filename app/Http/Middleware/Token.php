@@ -8,10 +8,14 @@ use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 use Illuminate\Http\Request;
 
-class AuthenticateToken
+class Token
 {
     protected mixed $key;
-
+    /**
+     * Handle an incoming request.
+     *
+     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     */
     public function __construct()
     {
         $this->key = config('app.sal');
@@ -20,11 +24,7 @@ class AuthenticateToken
     public function handle(Request $request, Closure $next)
     {
         try {
-            $deserializeToken = JWT::decode($request->header('token'), new Key($this->key, 'HS256'));
-            if(!$deserializeToken->data->profile_id_selected){
-                throw new Exception('El token proporcionado no cuenta con perfil');
-            }
-
+            JWT::decode($request->header('token'), new Key($this->key, 'HS256'));
         } catch (Exception $e) {
             return response()->json([
                 'error' => $e->getCode(),
