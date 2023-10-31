@@ -37,8 +37,15 @@ class AuthController extends Controller
             ]);
             
             $user->save();
+
+            $data = [
+                "user" => $user,
+                "profile_id_selected" => null
+            ];
+            $token = (new GenerateToken)->getJWTToken($data);
+
             $registerAuthResource = new RegisterAuthResource($user);
-            $registerAuthResource->additional(['status' => "success" ,'token' => $token]);
+            $registerAuthResource->additional([ 'profile_id_selected' => null, 'status' => true ,'token' => $token]);
             return  $registerAuthResource;
 
             /*
@@ -64,8 +71,7 @@ class AuthController extends Controller
 
 
        
-    public function login(LoginAuthRequest $request)
-    {
+    public function login(LoginAuthRequest $request){
         $credentials = $request->only('email', 'password');
 
         try {
