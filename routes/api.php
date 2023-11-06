@@ -5,6 +5,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\MovieController;
 
 use App\Models\Movie;
+use App\Models\Profile;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -46,12 +47,13 @@ Route::prefix('/auth')->group(function () {
 });
 */
 Route::group([
-    'middleware' => 'auth_token',
+    //'middleware' => ['auth_token:except=registera'],
     'prefix' => '/auth'
-], function ($router) {
+], function () {
     //Route::post('deserialize', [AuthController::class, "deserialize"]);
-    Route::post('login', [AuthController::class, "login"]);
-    Route::post('logout', [AuthController::class, "logout"]);
+    Route::post('login', [AuthController::class, "login"])->middleware('auth_token');
+    Route::get('login/profiles', [ProfileController::class, "getProfiles"])->middleware('auth_token');;
+    Route::post('logout', [AuthController::class, "logout"])->middleware('auth_token');
     Route::post('register',[AuthController::class, "register"]);   
 });
 
@@ -59,7 +61,7 @@ Route::group([
 
 
 //Route::apiResource('profile', ProfileController::class)->middleware("api");
-
+/*
 Route::group([
     'middleware' => 'token',
     'prefix' => '/profile'
@@ -67,17 +69,19 @@ Route::group([
     //Route::post('deserialize', [AuthController::class, "deserialize"]);
     Route::post('login', [ProfileController::class, "chooseProfile"]);
 });
+*/
 
-
+/*
 Route::group([
     'middleware' => 'auth_token',
     'prefix' => '/profile'
 ], function ($router) {
     //Route::post('deserialize', [AuthController::class, "deserialize"]);
     Route::get('me', [ProfileController::class, "me"]);
-});
+})
+*/;
 
 
-Route::apiResource('profile', ProfileController::class)->middleware('auth_token');
-Route::apiResource('movie', MovieController::class)->middleware('auth_token');
+//Route::apiResource('profile', ProfileController::class)->middleware('auth_token');
+//Route::apiResource('movie', MovieController::class)->middleware('auth_token');
 

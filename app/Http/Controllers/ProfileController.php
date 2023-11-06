@@ -8,6 +8,7 @@ use App\Models\Profile;
 use App\Http\Requests\StoreProfileRequest;
 use App\Http\Requests\ChooseProfileRequest;
 use App\Http\Resources\LoginAuthResource;
+use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use Exception;
 
@@ -19,7 +20,7 @@ class ProfileController extends Controller
 
 
     public function chooseProfile(Request $request){
-        try {
+        /*try {
             //
             $profile_id =  (int) $request->input("profile_id");
             $requestToken = request()->header('token');
@@ -57,6 +58,90 @@ class ProfileController extends Controller
             $token = (new GenerateToken)->getJWTToken($data);
             $loginAuthResource = new LoginAuthResource($user);
             $loginAuthResource->additional([ 'profile_id_selected' => $profile_id, 'status' => true ,'token' => $token]);
+            return  $loginAuthResource;
+
+        }catch(Exception $ex){
+            return response()->json([
+                'status' => 'error',
+                "message" => $ex->getMessage(),
+                'trace' => $ex->getTrace()
+            ], 500);
+        }
+        */
+    }
+
+    public function getProfiles(Request $request){
+        try {
+                $requestToken = request()->header('token');
+                $deserializeToken = (new GenerateToken)->verifyToken($requestToken);
+
+                $userId = $deserializeToken->data->id;
+                $email = $deserializeToken->data->email;
+                $password =  $deserializeToken->data->password;
+
+                $user = User::where('email', $email)
+                ->with(['profiles' => function ($query) {
+                    $query->where('status', 1)
+                    ->orderBy('id', 'desc'); // Ordenar los perfiles por el campo 'id' de forma descendente
+                }])
+                ->first();
+                
+                if(!$user){
+                    return response()->json([
+                        "status" => "error",
+                        "message" => "No existe un usuario registrado con ese email"
+                    ], 401);
+                }
+
+                if (!Hash::check($password, $user->password)){
+                    return response()->json([
+                        "status" => "error",
+                        "message" => "Las credenciales fueron actualizadas, por favor ingrese nuevamente"
+                    ], 401);
+                }
+
+                if ($user->status !== 1){
+                    return response()->json([
+                        "status" => "error",
+                        "message" => "El usuario ya no se encuentra activo"
+                    ], 401);
+                }
+
+                /*
+                $user = User::where('id', $userId)
+                ->with(['profiles' => function ($query) {
+                    $query->where('status', 1)
+                    ->orderBy('id', 'desc'); // Ordenar los perfiles por el campo 'id' de forma descendente
+                }])->first();
+                */
+/*
+                if ($user->status !== 1){
+                    return response()->json([
+                        "status" => "error",
+                        "message" => "El usuario no se encuentra activo"
+                    ], 401);
+                }*/
+
+                /*
+                $profile = Profile::where('id', $profile_id)->first();
+                if ($profile->status !== 1){
+                    return response()->json([
+                        "status" => "error",
+                        "message" => "El Perfil no se encuentra activo"
+                    ], 401);
+                }
+                */
+            /*
+            $data = [
+                "user" => $user,
+                "profile_id_selected" =>  $profile_id
+            ];
+            */
+            
+            
+            //$token = (new GenerateToken)->getJWTToken($data);
+            $loginAuthResource = new LoginAuthResource($user);
+            $loginAuthResource->additional(['status' => true ]);
             return  $loginAuthResource;
 
         }catch(Exception $ex){
@@ -126,6 +211,7 @@ class ProfileController extends Controller
      */
     public function show(string $id)
     {
+        
         //
     }
 

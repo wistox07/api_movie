@@ -17,11 +17,12 @@ use Exception;
 
 class AuthController extends Controller
 {
-    
+    /*
     public function __construct()
     {
-        $this->middleware('auth:auth_token', ['except' => ['login', 'register']]);//login, register methods won't go through the api guard
+        $this->middleware('auth:auth_token', ['except' => ['login', 'registera']]);//login, register methods won't go through the api guard
     }
+    */
     
 
     public function register(RegisterAuthRequest $request)
@@ -39,9 +40,12 @@ class AuthController extends Controller
             $user->save();
 
             $data = [
-                "user" => $user,
+                "id" => $user->id,
+                "email" => $user->email,
+                "password" =>$request->email,
                 "profile_id_selected" => null
             ];
+            //dd($data);
             $token = (new GenerateToken)->getJWTToken($data);
 
             $registerAuthResource = new RegisterAuthResource($user);
@@ -51,9 +55,11 @@ class AuthController extends Controller
             /*
             return response()->json([
                 "status" => "success",
-                "message" => "Usuario registrado"
+                "message" => "Usuario registrado",
+                "token" => $token
             ]);
             */
+            
             
             //Registrar perfil 
             //Registrar asociar imagen
