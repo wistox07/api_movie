@@ -17,7 +17,7 @@ class ProfileResource extends JsonResource
     {
 
         return [
-            'id' => /*encrypt($this->id)*/ $this->id,
+            'id' => $this->id,
             'name' => $this->name,
             "image" => $this->profile_image->route
         ];

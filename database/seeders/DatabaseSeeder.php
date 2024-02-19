@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use App\Models\Profile;
 use App\Models\ProfileImage;
+use App\Models\Actor;
+use App\Models\Director;
 class DatabaseSeeder extends Seeder
 {
     /**

@@ -17,7 +17,7 @@ return [
     */
 
     'name' => env('APP_NAME', 'Laravel'),
-    'sal' => env('api_movie'),
+    'sal' => env('APP_SAL'),
 
 
     /*

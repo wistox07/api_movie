@@ -16,12 +16,16 @@ class LoginAuthResource extends JsonResource
     public function toArray(Request $request): array
     {
 
+        //dd($this);
+        //dd($this);
+        
         return [
             'user' => [
                 'name' => $this->name,
                 'email' => $this->email,
             ],
-            "profiles" => ProfileResource::collection($this->profiles)
+            'profile_id' => null
+            //"profiles" => ProfileResource::collection($this->profiles)
         ];
 
 

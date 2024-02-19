@@ -29,7 +29,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //Route::middleware('auth:api')->post('logout', 'AuthController@logout');
 
 
-//Route::get('/login', [AuthController::class, "login"]);
+Route::get('/test', [AuthController::class, "test"]);
 /*
 Route::prefix('/auth')->middleware(['auth', 'admin'])->group(function () {
     // Rutas dentro del grupo "admin"
@@ -51,11 +51,13 @@ Route::group([
     'prefix' => '/auth'
 ], function () {
     //Route::post('deserialize', [AuthController::class, "deserialize"]);
-    Route::post('login', [AuthController::class, "login"])->middleware('auth_token');
-    Route::get('login/profiles', [ProfileController::class, "getProfiles"])->middleware('auth_token');;
+    Route::post('login', [AuthController::class, "login"]);
     Route::post('logout', [AuthController::class, "logout"])->middleware('auth_token');
-    Route::post('register',[AuthController::class, "register"]);   
 });
+
+Route::post('register',[AuthController::class, "register"]);   
+
+Route::get('logeed/profiles',[ProfileController::class, "getProfilesForToken"]);   
 
 
 

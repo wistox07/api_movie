@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Profile;
 use App\Http\Requests\StoreProfileRequest;
 use App\Http\Requests\ChooseProfileRequest;
-use App\Http\Resources\LoginAuthResource;
+use App\Http\Resources\ProfileResource;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use Exception;
@@ -17,7 +17,15 @@ class ProfileController extends Controller
     /**
      * Display a listing of the resource.
      */
+    public function getProfilesForToken(Request $request){
+        $requestToken = request()->header('token');
+        $deserializeToken = (new GenerateToken)->verifyToken($requestToken);
+        $userId = $deserializeToken->data->user->id;
+        
+        $profiles =  Profile::where('user_id', $userId)->get();
+        return ProfileResource::collection($profiles)->additional(['status' => true ]);
 
+    }
 
     public function chooseProfile(Request $request){
         /*try {

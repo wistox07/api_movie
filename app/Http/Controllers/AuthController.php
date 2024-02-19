@@ -23,6 +23,14 @@ class AuthController extends Controller
         $this->middleware('auth:auth_token', ['except' => ['login', 'registera']]);//login, register methods won't go through the api guard
     }
     */
+    /*
+    public function test (Request $request){
+        return response()->json([
+            "status" => "success",
+            "message" => "Ga registrado",
+        ]);
+    }
+    */
     
 
     public function register(RegisterAuthRequest $request)
@@ -83,38 +91,40 @@ class AuthController extends Controller
         try {
             //$user = User::where('email', $credentials['email'])->with('profiles')->first();
             $user = User::where('email', $credentials['email'])
-                            ->with(['profiles' => function ($query) {
+                            /*->with(['profiles' => function ($query) {
                                 $query->where('status', 1)
                                 ->orderBy('id', 'desc'); // Ordenar los perfiles por el campo 'id' de forma descendente
-                            }])
+                            }])*/
                             ->first();
             if(!$user){
                 return response()->json([
                     "status" => "error",
-                    "message" => "No existe un usuario registrado con ese email"
+                    "message" => "Correo electrónico desconocido, ¿Está bien escrito?"
                 ], 401);
             }
             if (!Hash::check($credentials['password'], $user->password)){
                 return response()->json([
                     "status" => "error",
-                    "message" => "Credenciales incorrectas"
+                    "message" => "Ocurrió un error al iniciar sesión. Es necesario que verifiques tu correo y contraseña para intentar de nuevo. En ¿Olvidaste la contraseña?, podrás restablecerla (código de error 92)."
                 ], 401);
             }
             if ($user->status !== 1){
                 return response()->json([
                     "status" => "error",
-                    "message" => "El usuario no se encuentra activo"
+                    "message" => "El usuario ya no se encuentra activo"
                 ], 401);
             }
 
+            
             $data = [
                 "user" => $user,
-                "profile_id_selected" => null
+                "profile_id" => null
             ];
             $token = (new GenerateToken)->getJWTToken($data);
-
+            
             $loginAuthResource = new LoginAuthResource($user);
-            $loginAuthResource->additional([ 'profile_id_selected' => null, 'status' => true ,'token' => $token]);
+            $loginAuthResource->additional([ 'profile_id' => null, 'status' => true ,'token' => $token]);
+            
             return  $loginAuthResource;
 
         } catch (Exception $ex) {
