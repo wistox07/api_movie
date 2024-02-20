@@ -44,7 +44,6 @@ class AuthenticateToken
         } catch (Exception $e) {
             return response()->json([
                 'error' => $e->getCode(),
-                //'message' => $e->getMessage()
                 'message' => 'Token no valido'
             ], 401);
         }

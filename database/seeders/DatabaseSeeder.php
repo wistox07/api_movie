@@ -10,6 +10,8 @@ use App\Models\Profile;
 use App\Models\ProfileImage;
 use App\Models\Actor;
 use App\Models\Director;
+use App\Models\Movie;
+
 class DatabaseSeeder extends Seeder
 {
     /**
@@ -109,5 +111,7 @@ class DatabaseSeeder extends Seeder
             'status' => true
         ]);
         // MAIN
+        Movie::factory(20)->create();
+
     }
 }

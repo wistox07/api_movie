@@ -57,7 +57,7 @@ Route::group([
 
 Route::post('register',[AuthController::class, "register"]);   
 
-Route::get('logeed/profiles',[ProfileController::class, "getProfilesForToken"]);   
+Route::get('logeed/profiles',[ProfileController::class, "getProfilesForToken"])->middleware('auth_token');   
 
 
 
@@ -85,5 +85,5 @@ Route::group([
 
 
 //Route::apiResource('profile', ProfileController::class)->middleware('auth_token');
-Route::apiResource('movie', MovieController::class);
+Route::apiResource('movie', MovieController::class)->middleware('profile_selected');
 
