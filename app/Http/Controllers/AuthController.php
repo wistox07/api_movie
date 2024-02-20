@@ -53,7 +53,7 @@ class AuthController extends Controller
                 "password" =>$request->email,
                 "profile_id_selected" => null
             ];
-            //dd($data);
+
             $token = (new GenerateToken)->getJWTToken($data);
 
             $registerAuthResource = new RegisterAuthResource($user);

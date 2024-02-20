@@ -85,5 +85,5 @@ Route::group([
 
 
 //Route::apiResource('profile', ProfileController::class)->middleware('auth_token');
-//Route::apiResource('movie', MovieController::class)->middleware('auth_token');
+Route::apiResource('movie', MovieController::class);
 
