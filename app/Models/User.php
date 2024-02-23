@@ -31,7 +31,6 @@ class User extends Authenticatable  // Implementa la interfaz
      * @var array<int, string>
      */
     protected $hidden = [
-        'password',
         'remember_token',
     ];
 

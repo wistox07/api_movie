@@ -28,21 +28,30 @@ class ProfileController extends Controller
     }
 
     public function chooseProfile(Request $request){
-        /*try {
+        try {
             //
             $profile_id =  (int) $request->input("profile_id");
             $requestToken = request()->header('token');
             $deserializeToken = (new GenerateToken)->verifyToken($requestToken);
+            //dd($deserializeToken);
+            //dd($deserializeToken);
             $userId = $deserializeToken->data->user->id;
 
-            $user = User::where('id', $userId)
-            ->with(['profiles' => function ($query) {
-                $query->where('status', 1)
-                ->orderBy('id', 'desc'); // Ordenar los perfiles por el campo 'id' de forma descendente
-            }])
-            ->first();
+            $user = User::where('email', $deserializeToken->data->user->email);
 
+            if(!$user){
+                return response()->json([
+                    "status" => "error",
+                    "message" => "Correo electrónico desconocido, ¿Está bien escrito?"
+                ], 401);
+            }
 
+            if ($user->password !==  $deserializeToken->data->user->password){
+                return response()->json([
+                    "status" => "error",
+                    "message" => "Ocurrió un error al iniciar sesión. Es necesario que verifiques tu correo y contraseña para intentar de nuevo. En ¿Olvidaste la contraseña?, podrás restablecerla (código de error 92)."
+                ], 401);
+            }
             if ($user->status !== 1){
                 return response()->json([
                     "status" => "error",
@@ -51,13 +60,20 @@ class ProfileController extends Controller
             }
 
             $profile = Profile::where('id', $profile_id)->first();
+            if(!$profile){
+                return response()->json([
+                    "status" => "error",
+                    "message" => "Este perfil no existe"
+                ], 401); 
+            }
+
             if ($profile->status !== 1){
                 return response()->json([
                     "status" => "error",
                     "message" => "El Perfil no se encuentra activo"
                 ], 401);
             }
-
+            
             $data = [
                 "user" => $user,
                 "profile_id_selected" =>  $profile_id
@@ -75,7 +91,7 @@ class ProfileController extends Controller
                 'trace' => $ex->getTrace()
             ], 500);
         }
-        */
+        
     }
 
     public function getProfiles(Request $request){

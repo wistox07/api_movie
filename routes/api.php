@@ -53,11 +53,15 @@ Route::group([
     //Route::post('deserialize', [AuthController::class, "deserialize"]);
     Route::post('login', [AuthController::class, "login"]);
     Route::post('logout', [AuthController::class, "logout"])->middleware('auth_token');
+    Route::post('choose_profile', [ProfileController::class, "chooseProfile"])->middleware('auth_token');
+
+
+    
 });
 
 Route::post('register',[AuthController::class, "register"]);   
 
-Route::get('logeed/profiles',[ProfileController::class, "getProfilesForToken"])->middleware('auth_token');   
+Route::get('logged/profiles',[ProfileController::class, "getProfilesForToken"])->middleware('auth_token');   
 
 
 

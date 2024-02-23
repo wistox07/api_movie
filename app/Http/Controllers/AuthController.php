@@ -115,7 +115,7 @@ class AuthController extends Controller
                 ], 401);
             }
 
-            
+            //dd($user);
             $data = [
                 "user" => $user,
                 "profile_id" => null
