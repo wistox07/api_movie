@@ -30,6 +30,7 @@ class ProfileController extends Controller
     public function chooseProfile(Request $request){
         try {
             //
+            dd($request->input("profile_id"));
             $profile_id =  (int) $request->input("profile_id");
             $requestToken = request()->header('token');
             $deserializeToken = (new GenerateToken)->verifyToken($requestToken);
@@ -37,8 +38,8 @@ class ProfileController extends Controller
             //dd($deserializeToken);
             $userId = $deserializeToken->data->user->id;
 
-            $user = User::where('email', $deserializeToken->data->user->email);
-
+            $user = User::select('id', 'name', 'email', 'password','status')
+            ->where('email', $deserializeToken->data->user->email)->first();
             if(!$user){
                 return response()->json([
                     "status" => "error",
@@ -59,6 +60,7 @@ class ProfileController extends Controller
                 ], 401);
             }
 
+            dd($profile_id);
             $profile = Profile::where('id', $profile_id)->first();
             if(!$profile){
                 return response()->json([

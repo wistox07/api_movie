@@ -22,7 +22,7 @@ class User extends Authenticatable  // Implementa la interfaz
         'name',
         'email',
         'status',
-        'password'
+        //'password'
     ];
 
     /**
