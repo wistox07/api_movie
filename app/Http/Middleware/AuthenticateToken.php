@@ -3,11 +3,11 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use Exception;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 use Illuminate\Http\Request;
-
+use Symfony\Component\HttpFoundation\Response;
+use Exception;
 class AuthenticateToken
 {
     protected mixed $key;
@@ -36,15 +36,20 @@ class AuthenticateToken
             ], 401);
         }
         return $next($request);
-
+ 
         */
 
         try {
+            $token = $request->header('token');
+            if (!$token) {
+                throw new Exception("Token missing"); // Lanza una excepción si el token está ausente
+            }
+            
             JWT::decode($request->header('token'), new Key($this->key, 'HS256'));
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return response()->json([
-                'error' => $e->getCode(),
-                'message' => 'Token no valido'
+                'status' => "error",
+                'message' => $e->getMessage()
             ], 401);
         }
         return $next($request);

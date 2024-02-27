@@ -27,15 +27,12 @@ class ProfileController extends Controller
 
     }
 
-    public function chooseProfile(Request $request){
+    public function chooseProfile(chooseProfileRequest $request){
         try {
-            //
-            dd($request->input("profile_id"));
+            
             $profile_id =  (int) $request->input("profile_id");
             $requestToken = request()->header('token');
             $deserializeToken = (new GenerateToken)->verifyToken($requestToken);
-            //dd($deserializeToken);
-            //dd($deserializeToken);
             $userId = $deserializeToken->data->user->id;
 
             $user = User::select('id', 'name', 'email', 'password','status')
@@ -47,20 +44,19 @@ class ProfileController extends Controller
                 ], 401);
             }
 
-            if ($user->password !==  $deserializeToken->data->user->password){
+            if($user->password !==  $deserializeToken->data->user->password){
                 return response()->json([
                     "status" => "error",
                     "message" => "Ocurrió un error al iniciar sesión. Es necesario que verifiques tu correo y contraseña para intentar de nuevo. En ¿Olvidaste la contraseña?, podrás restablecerla (código de error 92)."
                 ], 401);
             }
-            if ($user->status !== 1){
+            if($user->status !== 1){
                 return response()->json([
                     "status" => "error",
                     "message" => "El usuario no se encuentra activo"
                 ], 401);
             }
 
-            dd($profile_id);
             $profile = Profile::where('id', $profile_id)->first();
             if(!$profile){
                 return response()->json([

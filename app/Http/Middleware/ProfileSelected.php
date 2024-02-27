@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 use Symfony\Component\HttpFoundation\Response;
+use Exception;
+
 
 class ProfileSelected
 {
@@ -26,7 +28,11 @@ class ProfileSelected
     {
 
         try {
-            //dd($request->header('token'));
+            $token = $request->header('token');
+            if (!$token) {
+                throw new Exception("Token missing"); // Lanza una excepción si el token está ausente
+            }
+
            $deserializeToken = JWT::decode($request->header('token'), new Key($this->key, 'HS256'));
            if(!$deserializeToken->data->profile_id){
             return response()->json([
@@ -34,13 +40,14 @@ class ProfileSelected
                 'message' => 'EL usuario debe escoger un perfil'
             ], 401); 
            }
-
-        } catch (\Exception $e) {
+        }
+        catch (\Exception $e) {
             return response()->json([
                 'status' => "error",
                 'message' => $e->getMessage()
             ], 401);
         }
+        
         return $next($request);
     }
 }
