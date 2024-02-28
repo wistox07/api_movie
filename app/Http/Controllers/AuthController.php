@@ -115,15 +115,15 @@ class AuthController extends Controller
                 ], 401);
             }
 
-            //dd($user);
-            $data = [
+            $user->profile_selected = null;
+
+            $token = (new GenerateToken)->getJWTToken([
                 "user" => $user,
                 "profile_id" => null
-            ];
-            $token = (new GenerateToken)->getJWTToken($data);
+            ]);
             
             $loginAuthResource = new LoginAuthResource($user);
-            $loginAuthResource->additional([ 'profile_id' => null, 'status' => true ,'token' => $token]);
+            $loginAuthResource->additional([ 'status' => true ,'token' => $token]);
             
             return  $loginAuthResource;
 

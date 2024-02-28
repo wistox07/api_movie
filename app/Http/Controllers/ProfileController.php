@@ -8,6 +8,7 @@ use App\Models\Profile;
 use App\Http\Requests\StoreProfileRequest;
 use App\Http\Requests\ChooseProfileRequest;
 use App\Http\Resources\ProfileResource;
+use App\Http\Resources\LoginAuthResource;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use Exception;
@@ -72,14 +73,13 @@ class ProfileController extends Controller
                 ], 401);
             }
             
-            $data = [
+            $user->profile_id = $profile_id ;
+            $token = (new GenerateToken)->getJWTToken([
                 "user" => $user,
-                "profile_id_selected" =>  $profile_id
-            ];
-            
-            $token = (new GenerateToken)->getJWTToken($data);
+                "profile_id" =>  $profile_id
+            ]);
             $loginAuthResource = new LoginAuthResource($user);
-            $loginAuthResource->additional([ 'profile_id_selected' => $profile_id, 'status' => true ,'token' => $token]);
+            $loginAuthResource->additional(['status' => true ,'token' => $token]);
             return  $loginAuthResource;
 
         }catch(Exception $ex){

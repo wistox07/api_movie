@@ -30,7 +30,7 @@ class ProfileSelected
         try {
             $token = $request->header('token');
             if (!$token) {
-                throw new Exception("Token missing"); // Lanza una excepción si el token está ausente
+                throw new Exception("No se ha enviado token"); // Lanza una excepción si el token está ausente
             }
 
            $deserializeToken = JWT::decode($request->header('token'), new Key($this->key, 'HS256'));
