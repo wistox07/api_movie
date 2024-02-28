@@ -35,9 +35,23 @@ class MovieController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Movie $movie)
     {
-        //
+
+        return new MovieResource($movie);
+
+        //return $movie;
+        /*
+        $movies = Movie::with('genre')
+        ->with('ageCategory')
+        ->with('actors')
+        ->with('directors')
+        ->with('movieImages')
+        ->with('movieImages.typeMovieImage')
+        ->get();
+        */
+
+return MovieResource::collection($movies);
     }
 
     /**
